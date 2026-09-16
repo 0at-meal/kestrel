@@ -1,5 +1,6 @@
 add_library(kestrel_core STATIC
     oms/order_pool.cpp
+    perf/latency_histogram.cpp
 )
 
 target_include_directories(kestrel_core PUBLIC

@@ -8,6 +8,7 @@ add_executable(kestrel_tests
     oms/order_state_test.cpp
     oms/order_state_machine_test.cpp
     oms/order_pool_test.cpp
+    perf/latency_histogram_test.cpp
 )
 
 target_link_libraries(kestrel_tests PRIVATE
