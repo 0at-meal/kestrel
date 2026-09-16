@@ -1,0 +1,5 @@
+---
+Checks: '-*,clang-diagnostic-*,clang-analyzer-*,bugprone-*,performance-*,readability-*,modernize-*'
+WarningsAsErrors: ''
+HeaderFilterRegex: 'kestrel/.*'
+FormatStyle: none
