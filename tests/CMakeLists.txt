@@ -4,6 +4,7 @@ add_executable(kestrel_tests
     placeholder_test.cpp
     wire/wire_structs_test.cpp
     core/spsc_ring_buffer_test.cpp
+    core/spsc_ring_buffer_stress_test.cpp
 )
 
 target_link_libraries(kestrel_tests PRIVATE
