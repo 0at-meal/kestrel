@@ -1,4 +1,5 @@
 add_library(kestrel_core STATIC
+    gateway/inbound_gateway.cpp
     oms/order_pool.cpp
     perf/latency_histogram.cpp
 )
@@ -6,6 +7,17 @@ add_library(kestrel_core STATIC
 target_include_directories(kestrel_core PUBLIC
     $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
+    ${QuickFIX_INCLUDE_DIRS}
+)
+
+target_link_directories(kestrel_core PUBLIC
+    ${QuickFIX_LIBRARY_DIRS}
+)
+
+target_link_libraries(kestrel_core PUBLIC
+    ${QuickFIX_LIBRARIES}
+    z
+    m
 )
 
 add_executable(kestrel_oms process_a_main.cpp)
