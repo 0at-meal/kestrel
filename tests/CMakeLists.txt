@@ -6,6 +6,7 @@ add_executable(kestrel_tests
     core/spsc_ring_buffer_test.cpp
     core/spsc_ring_buffer_stress_test.cpp
     oms/order_state_test.cpp
+    oms/order_state_machine_test.cpp
 )
 
 target_link_libraries(kestrel_tests PRIVATE
