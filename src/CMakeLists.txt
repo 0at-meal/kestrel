@@ -1,7 +1,9 @@
 add_library(kestrel_core STATIC
     gateway/inbound_gateway.cpp
+    gateway/outbound_gateway.cpp
     oms/order_pool.cpp
     perf/latency_histogram.cpp
+    venue/stub_venue.cpp
 )
 
 target_include_directories(kestrel_core PUBLIC

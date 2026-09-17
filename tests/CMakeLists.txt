@@ -10,6 +10,7 @@ add_executable(kestrel_tests
     oms/order_pool_test.cpp
     perf/latency_histogram_test.cpp
     gateway/inbound_gateway_test.cpp
+    gateway/outbound_gateway_test.cpp
 )
 
 target_link_libraries(kestrel_tests PRIVATE
