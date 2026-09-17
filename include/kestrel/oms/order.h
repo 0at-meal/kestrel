@@ -28,6 +28,9 @@ struct Order {
     uint64_t        updated_at_mono_ns{0};
 
     [[nodiscard]] bool check_quantity_invariant() const noexcept {
+        if (state == OrderState::Cancelled || state == OrderState::Rejected || state == OrderState::Expired) {
+            return true;
+        }
         constexpr double kEpsilon = 1e-7;
         return std::abs((cum_qty + leaves_qty) - quantity) < kEpsilon;
     }

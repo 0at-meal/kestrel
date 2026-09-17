@@ -14,12 +14,12 @@
 #include <quickfix/fix44/OrderCancelRequest.h>
 
 #include "kestrel/core/spsc_ring_buffer.h"
+#include "kestrel/gateway/inbound_gateway.h"
 #include "kestrel/wire/enums.h"
 #include "kestrel/wire/wire_structs.h"
 
 namespace kestrel::gateway {
 
-constexpr size_t kDefaultGatewayQueueCapacity = 1024;
 using OutboundOrderBuffer = core::SpscRingBuffer<wire::OrderEventWire, kDefaultGatewayQueueCapacity>;
 using OutboundCancelBuffer = core::SpscRingBuffer<wire::CancelEventWire, kDefaultGatewayQueueCapacity>;
 using InboundExecBuffer = core::SpscRingBuffer<wire::ExecReportEventWire, kDefaultGatewayQueueCapacity>;
