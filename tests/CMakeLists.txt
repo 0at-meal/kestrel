@@ -12,6 +12,7 @@ add_executable(kestrel_tests
     perf/latency_histogram_test.cpp
     gateway/inbound_gateway_test.cpp
     gateway/outbound_gateway_test.cpp
+    integration/phase1_e2e_test.cpp
 )
 
 target_link_libraries(kestrel_tests PRIVATE

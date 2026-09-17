@@ -127,8 +127,9 @@ void OmsCore::process_inbound_order(const wire::OrderEventWire& wire) noexcept {
     emit_client_exec_report(order_id, wire::ExecType::New, wire::OrdStatus::PendingNew,
                             order.leaves_qty, 0.0, 0.0, 0.0, now);
 
-    // Push to outbound routing buffer
+    // Push to outbound routing buffer with order_id in cl_ord_id for venue correlation
     wire::OrderEventWire routed = wire;
+    std::snprintf(routed.cl_ord_id, sizeof(routed.cl_ord_id), "%lu", order_id);
     static_cast<void>(outbound_orders_.try_push(routed));
 
     orders_processed_.fetch_add(1, std::memory_order_relaxed);
@@ -172,8 +173,10 @@ void OmsCore::process_inbound_cancel(const wire::CancelEventWire& wire) noexcept
     emit_client_exec_report(order.order_id, wire::ExecType::New, wire::OrdStatus::PendingCancel,
                             order.leaves_qty, order.cum_qty, 0.0, 0.0, now);
 
-    // Forward cancel to venue
-    static_cast<void>(outbound_cancels_.try_push(wire));
+    // Forward cancel to venue with order.order_id in orig_cl_ord_id for venue correlation
+    wire::CancelEventWire routed_cancel = wire;
+    std::snprintf(routed_cancel.orig_cl_ord_id, sizeof(routed_cancel.orig_cl_ord_id), "%lu", order.order_id);
+    static_cast<void>(outbound_cancels_.try_push(routed_cancel));
 
     cancels_processed_.fetch_add(1, std::memory_order_relaxed);
     if (now >= wire.mono_ts_ns) {

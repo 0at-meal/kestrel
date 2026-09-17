@@ -64,7 +64,7 @@ TEST_F(OmsCoreTest, NewOrderAllocationAndPendingNew) {
     // Outbound routing buffer check
     OrderEventWire routed{};
     ASSERT_TRUE(outbound_orders.try_pop(routed));
-    EXPECT_STREQ(routed.cl_ord_id, "ORD-1");
+    EXPECT_STREQ(routed.cl_ord_id, "0");
     EXPECT_DOUBLE_EQ(routed.quantity, 2.0);
 
     EXPECT_EQ(oms.latency_histogram().total_count(), 1);
@@ -267,7 +267,7 @@ TEST_F(OmsCoreTest, CancelLifecycleAndTerminalTransition) {
     // Cancel routed to venue
     CancelEventWire routed_cancel{};
     ASSERT_TRUE(outbound_cancels.try_pop(routed_cancel));
-    EXPECT_STREQ(routed_cancel.orig_cl_ord_id, "ORD-CANC");
+    EXPECT_STREQ(routed_cancel.orig_cl_ord_id, "0");
 
     // Venue confirms cancel
     ExecReportEventWire venue_cancel{};

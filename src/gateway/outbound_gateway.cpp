@@ -22,27 +22,35 @@ uint64_t OutboundGatewayApplication::current_mono_ns() noexcept {
     return static_cast<uint64_t>(ts.tv_sec) * 1'000'000'000ULL + static_cast<uint64_t>(ts.tv_nsec);
 }
 
+#include <optional>
+
 uint64_t OutboundGatewayApplication::extract_order_id(const FIX::Message& msg) noexcept {
-    auto parse_digits = [](const std::string& str) noexcept -> uint64_t {
-        if (str.empty()) return 0;
+    auto parse_digits = [](const std::string& str) noexcept -> std::optional<uint64_t> {
+        if (str.empty()) return std::nullopt;
         size_t start = 0;
         while (start < str.size() && !std::isdigit(static_cast<unsigned char>(str[start]))) {
             ++start;
         }
-        if (start == str.size()) return 0;
+        if (start == str.size()) return std::nullopt;
         try {
             return std::stoull(str.substr(start));
         } catch (...) {
-            return 0;
+            return std::nullopt;
         }
     };
 
+    // For cancel execution reports, OrigClOrdID identifies the target order
+    if (msg.isSetField(FIX::FIELD::OrigClOrdID)) {
+        auto id = parse_digits(msg.getField(FIX::FIELD::OrigClOrdID));
+        if (id.has_value()) return *id;
+    }
     if (msg.isSetField(FIX::FIELD::ClOrdID)) {
-        uint64_t id = parse_digits(msg.getField(FIX::FIELD::ClOrdID));
-        if (id != 0) return id;
+        auto id = parse_digits(msg.getField(FIX::FIELD::ClOrdID));
+        if (id.has_value()) return *id;
     }
     if (msg.isSetField(FIX::FIELD::OrderID)) {
-        return parse_digits(msg.getField(FIX::FIELD::OrderID));
+        auto id = parse_digits(msg.getField(FIX::FIELD::OrderID));
+        if (id.has_value()) return *id;
     }
     return 0;
 }
